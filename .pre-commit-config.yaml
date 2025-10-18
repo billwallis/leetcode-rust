@@ -1,2 +1,62 @@
+# yaml-language-server: $schema=https://json.schemastore.org/pre-commit-config.json
 ---
-repos: []
+ci:
+  autoupdate_schedule: quarterly
+  skip: ["identity", "cargo-check", "cargo-fmt", "cargo-test"]
+
+default_install_hook_types: ["pre-commit", "pre-push"]
+default_stages: ["pre-commit"]
+
+repos:
+  - repo: meta
+    hooks:
+      - id: identity
+
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v6.0.0
+    hooks:
+#      - id: no-commit-to-branch
+#        name: Don't allow commits to the main branch
+#        args: ["--branch", "main"]
+      - id: trailing-whitespace
+        name: Remove trailing whitespace
+      - id: end-of-file-fixer
+        name: Ensure files end with a newline character
+      - id: mixed-line-ending
+        name: Align mixed line ending
+      - id: check-added-large-files
+        name: Check for large files
+      - id: check-json
+        name: Check JSON files are valid and parseable
+      - id: check-yaml
+        name: Check YAML files are valid and parseable
+      - id: check-toml
+        name: Check TOML files are valid and parseable
+      - id: detect-private-key
+        name: Check for the existence of private keys
+
+  - repo: https://github.com/pre-commit-ci/pre-commit-ci-config
+    rev: v1.6.1
+    hooks:
+      - id: check-pre-commit-ci-config
+        name: Validate pre-commit CI config
+
+  - repo: local
+    hooks:
+      - &cargo-default
+        id: cargo-check
+        name: Check Rust files can compile
+        entry: cargo check
+        stages: ["pre-commit", "pre-push"]
+        language: system
+        pass_filenames: false
+        always_run: true
+      - <<: *cargo-default
+        id: cargo-fmt
+        name: Format Rust files
+        entry: cargo fmt
+      - <<: *cargo-default
+        id: cargo-test
+        name: Run unit tests
+        entry: cargo test --verbose
+        stages: ["pre-push"]

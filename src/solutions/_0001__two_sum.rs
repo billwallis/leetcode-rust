@@ -11,7 +11,7 @@ impl Solution {
                 let inner_val = inner.1;
 
                 if outer_val + inner_val == target {
-                    return vec![outer_idx as i32, inner_idx as i32]
+                    return vec![outer_idx as i32, inner_idx as i32];
                 }
             }
         }
