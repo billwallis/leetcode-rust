@@ -33,11 +33,17 @@ repos:
       - id: check-pre-commit-ci-config
 
   - repo: https://github.com/billwallis/bills-hooks
-    rev: v0.0.13
+    rev: v0.0.15
     hooks:
       - id: banned-python-code
       - id: check-no-commit-comment
       - id: tidy-gitkeep
+
+  - repo: https://github.com/python-jsonschema/check-jsonschema
+    rev: 0.37.2
+    hooks:
+      - id: check-github-workflows
+      - id: check-compose-spec
 
   - repo: local
     hooks:
